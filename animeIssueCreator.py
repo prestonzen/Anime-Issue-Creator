@@ -1,16 +1,19 @@
-import requests
+import os
 import time
 import random
+import requests
+from dotenv import load_dotenv
 from tqdm import tqdm  # For the progress bar
 
-# Install tqdm with `pip install tqdm`
+# Load environment variables from .env file
+load_dotenv()
 
-# Your GitHub Personal Access Token
-<<<<<<< HEAD
-GITHUB_TOKEN = "INSERT_GITHUB_ACCESS_TOKEN_HERE"
-=======
-GITHUB_TOKEN = "GITHUB-ACCESS-TOKEN"
->>>>>>> a68d61a (.env support)
+# Access the GitHub token from the .env file
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+
+# Ensure the token is loaded
+if not GITHUB_TOKEN:
+    raise ValueError("Missing GITHUB_TOKEN in environment variables. Add it to a .env file.")
 
 # List of GitHub repositories in the format 'owner/repo'
 repos = [
@@ -30,6 +33,9 @@ headers = {
     "Accept": "application/vnd.github.v3+json",
     "User-Agent": "Mozilla/5.0"
 }
+
+# Hardcoded delay for staying below 490 requests/hour
+DELAY = 3600 / 490  # ≈ 7.35 seconds
 
 # Fetch random anime title using Jikan API
 def get_random_anime_title():
@@ -58,8 +64,10 @@ def create_github_issue(repo, title):
         response.raise_for_status()
         print(f"Issue created successfully in {repo}: {title}")
         return True
-    except Exception as e:
+    except requests.exceptions.RequestException as e:
         print(f"Error creating issue in {repo}: {e}")
+        if response is not None:
+            print(f"Response: {response.status_code} - {response.text}")
         return False
 
 # Main function to loop through repos
@@ -69,18 +77,21 @@ def main():
         for repo in repos:
             print(f"\nProcessing repository: {repo}")
             title = get_random_anime_title()
-            if title:
-                success = create_github_issue(repo, title)
-                if success:
-                    issues_created += 1
-                    print(f"Total Issues Created: {issues_created}")
 
-                # Show progress bar until the next issue
-                print("Waiting 2 minutes before the next issue...")
-                for _ in tqdm(range(120), desc="Time until next issue", unit="s"):
-                    time.sleep(1)
-            else:
-                print(f"Skipping repository {repo} due to error fetching anime title.")
+            # Skip if title is a fallback
+            if title == "Default Issue Title":
+                print("Skipping issue creation due to fallback title.")
+                continue
+
+            success = create_github_issue(repo, title)
+            if success:
+                issues_created += 1
+                print(f"Total Issues Created: {issues_created}")
+
+            # Show progress bar until the next issue
+            print(f"Waiting {DELAY:.2f} seconds before the next issue...")
+            for _ in tqdm(range(int(DELAY)), desc="Time until next issue", unit="s"):
+                time.sleep(1)
 
 # Run the script
 if __name__ == "__main__":

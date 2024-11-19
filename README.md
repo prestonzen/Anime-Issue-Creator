@@ -9,7 +9,7 @@ Welcome to the **Anime Issue Creator**, a meme-worthy program designed to bring 
 - 🚀 **Automated Issue Creation**: Generates GitHub issues with random anime titles.
 - 🎨 **Anime Themes**: Uses the [Jikan API](https://jikan.moe/) to fetch top anime titles.
 - 📊 **Progress Stats**: Tracks the total number of issues created in a session.
-- ⏳ **Progress Bar**: Waits for 2 minutes between issue creation with a fancy countdown.
+- ⏳ **Progress Bar**: Waits 7.35 seconds between issue creation to stay within rate limits.
 - ♻️ **Endless Looping**: Keeps creating issues for your friends… forever.
 - 🐳 **Docker Support**: Easily run this program in an isolated container.
 - 💥 **Error Resilience**: Skips errors gracefully like a true anime protagonist.
@@ -19,6 +19,7 @@ Welcome to the **Anime Issue Creator**, a meme-worthy program designed to bring 
 ## 🛠️ Installation
 
 ### Method 1: Run Locally
+
 1. Clone the repository:
    ```bash
    git clone https://github.com/your-username/anime-issue-creator.git
@@ -27,12 +28,12 @@ Welcome to the **Anime Issue Creator**, a meme-worthy program designed to bring 
 
 2. Install dependencies:
    ```bash
-   pip install requests tqdm
+   pip install requests tqdm python-dotenv
    ```
 
-3. Add your [**GitHub Personal Access Token**](https://github.com/settings/tokens) to the script:
-   ```python
-   GITHUB_TOKEN = "your_personal_access_token_here"
+3. Create a `.env` file in the root directory to store your [GitHub Personal Access Token](https://github.com/settings/tokens):
+   ```bash
+   echo "GITHUB_TOKEN=your_personal_access_token_here" > .env
    ```
 
 4. Run the script:
@@ -50,7 +51,7 @@ Welcome to the **Anime Issue Creator**, a meme-worthy program designed to bring 
    cd anime-issue-creator
    ```
 
-2. Create a `.env` file in the root of the project to store your GitHub token:
+2. Create a `.env` file in the root of the project to store your [GitHub token](https://github.com/settings/tokens):
    ```bash
    echo "GITHUB_TOKEN=your_personal_access_token_here" > .env
    ```
@@ -78,7 +79,7 @@ Anime Title: Attack on Titan
 Creating issue in tmarktg/Calculator-Beta: Attack on Titan
 Issue created successfully in tmarktg/Calculator-Beta: Attack on Titan
 Total Issues Created: 1
-Waiting 2 minutes before the next issue...
+Waiting 7.35 seconds before the next issue...
 ```
 
 ---
@@ -87,7 +88,7 @@ Waiting 2 minutes before the next issue...
 
 1. Fetches a random anime title from the Jikan API.
 2. Creates a new GitHub issue in the selected repository.
-3. Waits for 2 minutes with a fancy progress bar.
+3. Waits for 7.35 seconds with a fancy progress bar to stay under rate limits.
 4. Repeats the process endlessly for maximum fun.
 
 ---
@@ -117,7 +118,7 @@ A random selection of anime titles you might encounter in your issues:
 graph TD
     Start[Start the Program] --> FetchTitle[Fetch Random Anime Title]
     FetchTitle --> CreateIssue[Create GitHub Issue]
-    CreateIssue --> Wait[Wait 2 Minutes]
+    CreateIssue --> Wait[Wait 7.35 Seconds]
     Wait --> Stats[Update Stats]
     Stats --> NextRepo[Process Next Repository]
     NextRepo -->|All Repos Processed?| Start
