@@ -6,7 +6,11 @@ from tqdm import tqdm  # For the progress bar
 # Install tqdm with `pip install tqdm`
 
 # Your GitHub Personal Access Token
+<<<<<<< HEAD
 GITHUB_TOKEN = "INSERT_GITHUB_ACCESS_TOKEN_HERE"
+=======
+GITHUB_TOKEN = "GITHUB-ACCESS-TOKEN"
+>>>>>>> a68d61a (.env support)
 
 # List of GitHub repositories in the format 'owner/repo'
 repos = [
